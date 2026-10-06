@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnSpace - E-Learning Portal</title>
+<style>
+:root{--primary:#4f46e5;--blue:#0ea5e9;--bg:#f5f7fb;--text:#1f2937;--muted:#64748b;--card:#fff;--success:#16a34a;--warn:#d97706}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;padding:25px 20px}header>div,main{max-width:1180px;margin:auto}.head{display:flex;justify-content:space-between;gap:20px;align-items:center}h1{font-size:28px;margin:0 0 6px}header p{margin:0;opacity:.9}.profile{background:rgba(255,255,255,.16);padding:10px 14px;border-radius:10px;font-weight:bold}
+main{padding:25px 20px 50px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:22px}.stat,.section{background:var(--card);border-radius:14px;box-shadow:0 6px 18px rgba(15,23,42,.08)}.stat{padding:18px}.stat b{display:block;font-size:26px;margin-bottom:5px}.stat span{font-size:14px;color:var(--muted)}.section{padding:22px;margin-bottom:22px}h2{font-size:21px;margin:0 0 16px}.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.course{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}.course-banner{height:80px;padding:16px;color:white;font-weight:bold;font-size:18px;background:linear-gradient(135deg,#4f46e5,#7c3aed)}.course:nth-child(2) .course-banner{background:linear-gradient(135deg,#0891b2,#0ea5e9)}.course:nth-child(3) .course-banner{background:linear-gradient(135deg,#ea580c,#f59e0b)}.course-body{padding:15px}.course-body h3{margin:0 0 8px;font-size:17px}.course-body p{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.4}.progress-wrap{margin:10px 0}.progress-label{font-size:13px;display:flex;justify-content:space-between;margin-bottom:6px}.bar{height:9px;border-radius:10px;background:#e2e8f0;overflow:hidden}.fill{height:100%;background:var(--primary);border-radius:10px}.course button,.lesson button{border:0;background:var(--primary);color:white;padding:9px 12px;border-radius:8px;font-weight:bold;cursor:pointer}.course button:hover,.lesson button:hover{filter:brightness(.94)}.layout{display:grid;grid-template-columns:1.6fr .9fr;gap:22px}.lessons{display:grid;gap:12px}.lesson{border:1px solid #e2e8f0;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.lesson strong{display:block;margin-bottom:4px}.lesson small{color:var(--muted)}.lesson.done{border-left:5px solid var(--success);background:#f0fdf4}.lesson.done button{background:#dcfce7;color:#166534}.reminder{padding:14px;border-radius:10px;background:#eff6ff;border-left:4px solid var(--blue);margin-bottom:12px}.reminder b{display:block;margin-bottom:5px}.reminder span{color:var(--muted);font-size:14px}.message{color:var(--success);font-size:14px;min-height:18px;margin-top:12px}@media(max-width:900px){.courses{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}@media(max-width:550px){.courses,.stats{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.lesson{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div class="head"><div><h1>LearnSpace</h1><p>Your personal e-learning dashboard</p></div><div class="profile">Student: Alex Johnson</div></div></header>
+<main>
+<section class="stats"><div class="stat"><b id="courseCount">3</b><span>Enrolled courses</span></div><div class="stat"><b id="lessonCount">0</b><span>Lessons completed</span></div><div class="stat"><b id="progressCount">0%</b><span>Overall progress</span></div><div class="stat"><b>2</b><span>Upcoming deadlines</span></div></section>
+<section class="section"><h2>My Courses</h2><div class="courses" id="courses"></div></section>
+<div class="layout"><section class="section"><h2>Continue Learning</h2><div class="lessons" id="lessons"></div><div class="message" id="message"></div></section><aside class="section"><h2>Upcoming</h2><div class="reminder"><b>Web Design Project</b><span>Due: Friday, 18 October</span></div><div class="reminder"><b>Python Quiz</b><span>Due: Monday, 21 October</span></div><h2 style="margin-top:24px">Learning Tip</h2><p style="color:#64748b;line-height:1.5;margin:0">Study in short sessions, complete one lesson at a time, and review concepts regularly.</p></aside></div>
+</main>
+<script>
+const courses=[{id:'web',name:'Web Development Basics',instructor:'Instructor: Maya Patel',progress:65},{id:'python',name:'Python for Beginners',instructor:'Instructor: David Lee',progress:40},{id:'design',name:'UI/UX Design Fundamentals',instructor:'Instructor: Sara Khan',progress:25}];
+const lessons=[{id:1,course:'Web Development Basics',title:'HTML Structure and Elements',time:'20 minutes'},{id:2,course:'Web Development Basics',title:'CSS Styling Essentials',time:'25 minutes'},{id:3,course:'Python for Beginners',title:'Variables and Data Types',time:'18 minutes'},{id:4,course:'UI/UX Design Fundamentals',title:'Design Thinking Process',time:'22 minutes'}];
+const KEY='learnspace-completed-lessons';let completed=JSON.parse(localStorage.getItem(KEY)||'[]');
+function renderCourses(){document.getElementById('courses').innerHTML=courses.map(c=>'<article class="course"><div class="course-banner">'+c.name+'</div><div class="course-body"><h3>'+c.name+'</h3><p>'+c.instructor+'</p><div class="progress-wrap"><div class="progress-label"><span>Progress</span><b>'+c.progress+'%</b></div><div class="bar"><div class="fill" style="width:'+c.progress+'%"></div></div></div><button onclick="showCourse(''+c.id+'')">Open Course</button></div></article>').join('');}
+function renderLessons(){document.getElementById('lessons').innerHTML=lessons.map(l=>{let done=completed.includes(l.id);return '<div class="lesson '+(done?'done':'')+'"><div><strong>'+l.title+'</strong><small>'+l.course+' · '+l.time+'</small></div><button onclick="toggleLesson('+l.id+')">'+(done?'Completed':'Mark Complete')+'</button></div>';}).join('');}
+function updateStats(){let count=completed.length;document.getElementById('lessonCount').textContent=count;document.getElementById('progressCount').textContent=Math.round(count/lessons.length*100)+'%';}
+function toggleLesson(id){completed=completed.includes(id)?completed.filter(x=>x!==id):[...completed,id];localStorage.setItem(KEY,JSON.stringify(completed));renderLessons();updateStats();document.getElementById('message').textContent='Your learning progress has been saved.';setTimeout(()=>document.getElementById('message').textContent='',2200);}
+function showCourse(id){const course=courses.find(c=>c.id===id);alert('Opening '+course.name+'
+
+This demo portal shows course progress and lesson completion.');}
+renderCourses();renderLessons();updateStats();
+</script>
+</body>
+</html>
